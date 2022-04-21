@@ -48,7 +48,7 @@ const Navbar = ({ setAuthVisibility, setItemList }) => {
     try {
       if (!query) return;
 
-      console.log("Query: ", query);
+      navigate('/');
 
       dispatch(setProgress(true));
       const { data } = await searchPost(query);
