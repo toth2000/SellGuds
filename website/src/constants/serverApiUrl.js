@@ -1,4 +1,5 @@
-export const apiProductionUrl = "http://localhost:5000";
+// export const apiProductionUrl = "http://localhost:5000";
+export const apiProductionUrl = "https://sellguds.onrender.com";
 
 /** Auth Route */
 
@@ -33,4 +34,4 @@ export const fetchUserPostUrl = "/post/user";
 // post/purchase/:id
 export const fetchUserPurchaseUrl = "/post/user/purchase";
 
-export const searchPostUrl = '/post/search'
+export const searchPostUrl = "/post/search";

@@ -2,7 +2,7 @@
 
 A simple website to sell your used goods online. Here, seller can post ad of the product they are selling. And interested buy can buy the product directly from the seller.
 
-Website: 
+Website: https://sell-guds.vercel.app/
 
 ---
 ## Requirements
