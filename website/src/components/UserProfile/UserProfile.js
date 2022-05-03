@@ -115,7 +115,7 @@ const UserProfile = () => {
   useEffect(() => {
     const id = location.pathname.split("/")[2];
     getUserInformation(id);
-  }, []);
+  }, [location]);
 
   return (
     <Container>
