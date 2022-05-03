@@ -48,7 +48,7 @@ const Navbar = ({ setAuthVisibility, setItemList }) => {
     try {
       if (!query) return;
 
-      navigate('/');
+      navigate("/");
 
       dispatch(setProgress(true));
       const { data } = await searchPost(query);
@@ -67,6 +67,11 @@ const Navbar = ({ setAuthVisibility, setItemList }) => {
   };
 
   const handleSellButtonClick = () => {
+    if (!user.isLoggedIn) {
+      setAuthVisibility(true);
+      return;
+    }
+
     navigate("/post");
   };
 

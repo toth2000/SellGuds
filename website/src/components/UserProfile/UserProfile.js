@@ -24,23 +24,38 @@ import { logoutUser } from "../../redux/action/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchUserPost, fetchUserPurchase } from "../../api/serverAPI/post";
+import { getUserById } from "../../api/serverAPI/auth";
 import { setProgress } from "../../redux/action/progress";
 
 const UserProfile = () => {
   const [post, setPost] = useState([]);
+  const [user, setUser] = useState(null);
 
-  const [userIdParam, setUserIdParam] = useState(null);
-  const { user } = useSelector((state) => state.auth);
+  const currentUser = useSelector((store) => store.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const getAllPost = async () => {
+  const getUserInformation = async (id) => {
+    try {
+      const { data } = await getUserById(id);
+      setUser(data);
+    } catch (error) {
+      console.log("Error occurred in getSellerInformation\n", error);
+      console.log(
+        "Error occurred in getSellerInformation API\n",
+        error?.response
+      );
+    } finally {
+      dispatch(setProgress(false));
+    }
+  };
+
+  const getAllPost = async (id) => {
     try {
       dispatch(setProgress(true));
-      const { data } = await fetchUserPost(user?._id);
-     
+      const { data } = await fetchUserPost(id);
       setPost(data);
     } catch (error) {
       console.log("Error occured in getUserPost", error);
@@ -50,11 +65,10 @@ const UserProfile = () => {
     }
   };
 
-  const getAllPurchase = async () => {
+  const getAllPurchase = async (id) => {
     try {
       dispatch(setProgress(true));
-      const { data } = await fetchUserPurchase(user?._id);
-    
+      const { data } = await fetchUserPurchase(id);
       setPost(data);
     } catch (error) {
       console.log("Error occured in getUserPurchase", error);
@@ -94,20 +108,20 @@ const UserProfile = () => {
 
   useEffect(() => {
     choice.forEach((element) => {
-      if (element.active === true) element.apiCall();
+      if (element.active === true) element.apiCall(user?._id);
     });
-  }, [choice]);
+  }, [choice, user]);
 
   useEffect(() => {
     const id = location.pathname.split("/")[2];
-    setUserIdParam(id);
+    getUserInformation(id);
   }, []);
 
   return (
     <Container>
       <ProfileContainer>
         <LogoutContainer>
-          {userIdParam === user?._id ? (
+          {currentUser.user?._id === user?._id ? (
             <PowerSettingsNewIcon
               onClick={handleLogout}
               sx={{ color: "red", cursor: "pointer" }}
@@ -118,7 +132,7 @@ const UserProfile = () => {
         <InfoContainer>
           <UserNameText>{user?.fullName}</UserNameText>
           <StyledSmallText>{`Joined ${moment(
-            user.createdAt
+            user?.createdAt
           ).fromNow()}`}</StyledSmallText>
         </InfoContainer>
       </ProfileContainer>

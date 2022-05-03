@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { fetchLocation } from "../../helper/location";
@@ -33,6 +33,8 @@ const Post = () => {
       lon: "",
     },
   });
+
+  const user = useSelector((store) => store.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -91,6 +93,11 @@ const Post = () => {
   };
 
   useEffect(() => {
+    if (!user.isLoggedIn) {
+      navigate("/");
+      return;
+    }
+
     getLocation();
   }, []);
 
