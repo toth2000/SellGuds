@@ -161,7 +161,8 @@ const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
-    return res.status(200).json(user);
+    const { password, ...others } = user._doc;
+    return res.status(200).json(others);
   } catch (error) {
     console.log("Error in getUserById, auth.js controller\n", error);
     return res.status(500).json({ message: "Server Error" });
